@@ -38,9 +38,44 @@ activities = {
       "schedule": "Segundas, quartas e sextas, 14h - 15h",
       "max_participants": 30,
       "participants": ["john@mergington.edu", "olivia@mergington.edu"]
+   },
+   "Futebol": {
+      "description": "Treine habilidades de futebol e participe de jogos amistosos",
+      "schedule": "Segundas e quartas, 16h - 17h30",
+      "max_participants": 22,
+      "participants": []
+   },
+   "Basquete": {
+      "description": "Aprenda técnicas de basquete e jogue em equipe",
+      "schedule": "Terças e quintas, 17h - 18h30",
+      "max_participants": 14,
+      "participants": []
+   },
+   "Artes Plásticas": {
+      "description": "Explore pintura, desenho e escultura em um ambiente criativo",
+      "schedule": "Quartas, 15h30 - 17h",
+      "max_participants": 15,
+      "participants": []
+   },
+   "Teatro": {
+      "description": "Participe de aulas de atuação, improvisação e produção de peças teatrais",
+      "schedule": "Sextas, 17h - 18h30",
+      "max_participants": 18,
+      "participants": []
+   },
+   "Clube de Leitura": {
+      "description": "Leia e discuta livros interessantes com outros estudantes",
+      "schedule": "Segundas, 17h - 18h",
+      "max_participants": 16,
+      "participants": []
+   },
+   "Clube de Debate": {
+      "description": "Desenvolva habilidades de argumentação e oratória em debates estruturados",
+      "schedule": "Quintas, 16h - 17h30",
+      "max_participants": 20,
+      "participants": []
    }
 }
-
 
 @app.get("/")
 def root():
@@ -62,6 +97,15 @@ def signup_for_activity(activity_name: str, email: str):
     # Get the specificy activity
     activity = activities[activity_name]
 
+    # Validar se o estudante já está inscrito    if email in activity["participants"]:
+    if email in activity["participants"]:
+        raise HTTPException(status_code=400, detail="Estudante já inscrito nesta atividade")
+
     # Add student
     activity["participants"].append(email)
     return {"message": f"{email} inscrito(a) em {activity_name} com sucesso"}
+
+
+if __name__ == "__main__":
+    import uvicorn
+    uvicorn.run(app, host="0.0.0.0", port=8000)
